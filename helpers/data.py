@@ -20,3 +20,12 @@ def create_password(length=10, default=False):
         password += str(randint(0, 9))
 
     return password
+
+
+def create_user(default_pwd=False):
+    username = create_username()
+    phone_number = create_phone_number()
+    password = create_password(default=default_pwd)
+    return {'username': username,
+            'phone_number': phone_number,
+            'password': password}
