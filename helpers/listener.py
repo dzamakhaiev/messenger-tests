@@ -1,7 +1,7 @@
 from queue import Queue
 from threading import Thread
 from flask import Flask, request
-from network import find_free_port
+from helpers.network import find_free_port
 
 
 LISTENER_HOST = '0.0.0.0'
