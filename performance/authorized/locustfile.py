@@ -1,5 +1,6 @@
 import os
 import sys
+import logging
 from time import sleep
 from random import uniform
 from datetime import datetime
@@ -26,11 +27,13 @@ class TestLoad(HttpUser):
 
     def on_start(self):
         # Create new user to send messages
+        logging.info('Create new user')
         sleep(uniform(0.25, 1.75))
         sender_user_json = create_user()
         response = self.client.post(messenger_urls.USERS, json=sender_user_json)
+        logging.info(f'Response: {response.status_code} {response.text}')
 
-        if response.ok:
+        if response.status_code == 201:
             user_id = response.json().get('user_id')
             self.msg_json['sender_id'] = user_id
             self.msg_json['sender_username'] = sender_user_json.get('username')
@@ -40,8 +43,9 @@ class TestLoad(HttpUser):
         # Create new user to receive messages
         user_json = create_user()
         response = self.client.post(messenger_urls.USERS, json=user_json)
+        logging.info(f'Response: {response.status_code} {response.text}')
 
-        if response.ok:
+        if response.status_code == 200:
             receiver_id = response.json().get('user_id')
             self.msg_json['receiver_id'] = receiver_id
         else:
@@ -51,7 +55,9 @@ class TestLoad(HttpUser):
         response = self.client.post(messenger_urls.LOGIN, json={'username': sender_user_json.get('username'),
                                                                 'password': sender_user_json.get('password'),
                                                                 'user_address': 'some_ip'})
-        if response.ok:
+        logging.info(f'Response: {response.status_code} {response.text}')
+
+        if response.status_code == 200:
             session_id = response.json().get('session_id')
             self.msg_json['session_id'] = session_id
             token = response.json().get('token')
