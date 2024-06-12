@@ -14,8 +14,7 @@ class MessagesTest(TestFramework):
         self.user = self.create_new_user()
         self.log_in_with_listener_url(user=self.user, listener_port=find_free_port())
         self.msg_json = {'message': 'test', 'sender_id': self.user.user_id, 'sender_username': self.user.username,
-                         'receiver_id': None, 'session_id': self.user.session_id,
-                         'send_date': datetime.now().strftime(messenger_test_data.DATETIME_FORMAT)}
+                         'receiver_id': None, 'send_date': datetime.now().strftime(messenger_test_data.DATETIME_FORMAT)}
 
     def test_send_message_to_offline_user(self):
         new_user = self.create_new_user()
@@ -55,7 +54,7 @@ class MessagesTest(TestFramework):
         # Create message json for both users
         msg_to_new_user = self.create_new_msg_json(receiver_id=new_user.user_id)
         msg_to_default_user = self.create_new_msg_json(sender_id=new_user.user_id, sender_username=new_user.username,
-                                                       receiver_id=self.user.user_id, session_id=new_user.session_id)
+                                                       receiver_id=self.user.user_id)
 
         # Send messages to both users
         response_new = self.send_message(msg_to_new_user, token=self.user.token)
@@ -89,7 +88,7 @@ class MessagesTest(TestFramework):
         new_user = self.create_new_user()
         self.msg_json['receiver_id'] = new_user.user_id
 
-        for field in ['message', 'sender_id', 'sender_username', 'receiver_id', 'session_id', 'send_date']:
+        for field in ['message', 'sender_id', 'sender_username', 'receiver_id', 'send_date']:
 
             with self.subTest(f'Send message with no "{field}" field.'):
                 incorrect_json = remove_json_field(self.msg_json, field)
@@ -100,7 +99,7 @@ class MessagesTest(TestFramework):
         new_user = self.create_new_user()
         self.msg_json['receiver_id'] = new_user.user_id
 
-        for field, code in [('sender_id', 400), ('sender_username', 401), ('receiver_id', 400), ('session_id', 401)]:
+        for field, code in [('sender_id', 400), ('sender_username', 401), ('receiver_id', 400)]:
 
             with self.subTest(f'Send message with incorrect "{field}" field.'):
                 incorrect_json = corrupt_json_field(self.msg_json, field)

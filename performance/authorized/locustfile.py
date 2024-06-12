@@ -22,7 +22,7 @@ class TestLoad(HttpUser):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.msg_json = {'message': 'test', 'sender_id': None, 'sender_username': None,
-                         'receiver_id': None, 'session_id': None, 'send_date': ''}
+                         'receiver_id': None, 'send_date': ''}
         self.headers = {'Content-type': 'application/json', 'Authorization': ''}
 
     def on_start(self):
@@ -45,7 +45,7 @@ class TestLoad(HttpUser):
         response = self.client.post(messenger_urls.USERS, json=user_json)
         logging.info(f'Response: {response.status_code} {response.text}')
 
-        if response.status_code == 200:
+        if response.status_code == 201:
             receiver_id = response.json().get('user_id')
             self.msg_json['receiver_id'] = receiver_id
         else:
@@ -58,8 +58,6 @@ class TestLoad(HttpUser):
         logging.info(f'Response: {response.status_code} {response.text}')
 
         if response.status_code == 200:
-            session_id = response.json().get('session_id')
-            self.msg_json['session_id'] = session_id
             token = response.json().get('token')
             self.headers['Authorization'] = f'Bearer {token}'
         else:

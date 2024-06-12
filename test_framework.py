@@ -22,7 +22,6 @@ class User:
         self.username = username
         self.password = password
         self.phone_number = phone_number
-        self.session_id = None
         self.token = None
         self.user_address = None
         self.listener_port = None
@@ -89,7 +88,6 @@ class TestFramework(unittest.TestCase):
         response = self.log_in(login_json)
 
         if response.status_code == 200:
-            user.session_id = response.json()['session_id']
             user.token = response.json()['token']
 
         else:
@@ -114,7 +112,7 @@ class TestFramework(unittest.TestCase):
         return user
 
     def delete_new_user(self, user: User):
-        user_json = {'user_id': user.user_id, 'session_id': user.session_id, 'request': 'delete_user'}
+        user_json = {'user_id': user.user_id}
         response = self.delete_user(user_json)
         return response
 
@@ -123,7 +121,6 @@ class TestFramework(unittest.TestCase):
         msg_json['sender_id'] = kwargs.get('sender_id', msg_json['sender_id'])
         msg_json['sender_username'] = kwargs.get('sender_username', msg_json['sender_username'])
         msg_json['receiver_id'] = kwargs.get('receiver_id', msg_json['receiver_id'])
-        msg_json['session_id'] = kwargs.get('session_id', msg_json['session_id'])
         msg_json['message'] = kwargs.get('message', msg_json['message'])
         msg_json['send_date'] = datetime.now().strftime(messenger_test_data.DATETIME_FORMAT)
         return msg_json

@@ -18,9 +18,6 @@ class LoginTest(TestFramework):
         user_id = response.json().get('user_id')
         self.assertEqual(messenger_test_data.USER_ID, user_id, f'Incorrect user_id: {user_id}')
 
-        session_id = response.json().get('session_id')
-        self.assertIsInstance(session_id, str, f'Unexpected session_id data type: {session_id}')
-
         token = response.json().get('token')
         self.assertIsInstance(token, str, f'Unexpected token data type: {token}')
 
