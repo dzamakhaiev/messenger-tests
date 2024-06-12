@@ -1,6 +1,8 @@
 import os
 import sys
-from  datetime import datetime
+from time import sleep
+from random import uniform
+from datetime import datetime
 from locust import HttpUser, task, constant
 
 # Fix for run via cmd inside venv
@@ -24,6 +26,7 @@ class TestLoad(HttpUser):
 
     def on_start(self):
         # Create new user to send messages
+        sleep(uniform(0.25, 1.75))
         sender_user_json = create_user()
         response = self.client.post(messenger_urls.USERS, json=sender_user_json)
 
