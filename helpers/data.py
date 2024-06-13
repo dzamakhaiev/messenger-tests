@@ -4,7 +4,7 @@ from random import randint
 
 
 def create_username():
-    return 'user_{}'.format(randint(1, 999999))
+    return 'user_{}'.format(randint(1, 9999999))
 
 
 def create_phone_number():
