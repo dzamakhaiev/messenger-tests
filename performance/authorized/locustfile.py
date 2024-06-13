@@ -25,15 +25,29 @@ class TestLoad(HttpUser):
                          'receiver_id': None, 'send_date': ''}
         self.headers = {'Content-type': 'application/json', 'Authorization': ''}
 
+    def create_user(self):
+        user_id = None
+        counter = 0
+
+        while not user_id:
+            user_json = create_user()
+            response = self.client.post(messenger_urls.USERS, json=user_json)
+            logging.info(f'Response: {response.status_code} {response.text}')
+
+            if response.status_code == 201 and response.json().get('user_id'):
+                return response, user_json
+            elif counter >= 3:
+                return response, user_json
+            else:
+                counter += 1
+
     def on_start(self):
         # Create new user to send messages
         logging.info('Create new user')
         sleep(uniform(0.25, 1.75))
-        sender_user_json = create_user()
-        response = self.client.post(messenger_urls.USERS, json=sender_user_json)
-        logging.info(f'Response: {response.status_code} {response.text}')
+        response, sender_user_json = self.create_user()
 
-        if response.status_code == 201:
+        if response.status_code == 201 and response.json().get('user_id'):
             user_id = response.json().get('user_id')
             self.msg_json['sender_id'] = user_id
             self.msg_json['sender_username'] = sender_user_json.get('username')
@@ -41,11 +55,9 @@ class TestLoad(HttpUser):
             self.stop()
 
         # Create new user to receive messages
-        user_json = create_user()
-        response = self.client.post(messenger_urls.USERS, json=user_json)
-        logging.info(f'Response: {response.status_code} {response.text}')
+        response, _ = self.create_user()
 
-        if response.status_code == 201:
+        if response.status_code == 201 and response.json().get('user_id'):
             receiver_id = response.json().get('user_id')
             self.msg_json['receiver_id'] = receiver_id
         else:
@@ -63,9 +75,15 @@ class TestLoad(HttpUser):
         else:
             self.stop()
 
+        logging.info(f'Start user with json: {self.msg_json}')
+
     @task
     def check_message(self):
         self.msg_json['send_date'] = datetime.now().strftime(test_data.DATETIME_FORMAT)
-        self.client.post(messenger_urls.MESSAGES, json=self.msg_json, headers=self.headers)
+        response = self.client.post(messenger_urls.MESSAGES, json=self.msg_json, headers=self.headers)
+
+        if response.status_code != 200:
+            logging.info(f'Response: {response.status_code} {response.text}')
+            logging.info(f'Message json: {self.msg_json}')
 
 
