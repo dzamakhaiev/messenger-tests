@@ -6,12 +6,12 @@ from helpers.network import find_free_port
 
 
 LISTENER_HOST = '0.0.0.0'
-LISTENER_PORT = find_free_port()
-LISTENER_URL = f'http://{socket.gethostbyname(socket.gethostname())}:{LISTENER_PORT}'
 
 
-def run_listener(queue: Queue, daemon=True, port=LISTENER_PORT):
+def run_listener(queue: Queue, port=None):
     app = Flask(__name__)
+    if not port:
+        port = find_free_port()
 
     @app.route('/', methods=['POST'])
     def receive_msg():
@@ -19,8 +19,9 @@ def run_listener(queue: Queue, daemon=True, port=LISTENER_PORT):
             queue.put(request.json)
             return 'Message received.', 200
 
-    task_thread = Thread(daemon=daemon, target=lambda: app.run(host=LISTENER_HOST, port=port, debug=False))
+    task_thread = Thread(target=lambda: app.run(host=LISTENER_HOST, port=port, debug=False))
     task_thread.start()
+    return f'http://{socket.gethostbyname(socket.gethostname())}:{port}'
 
 
 if __name__ == '__main__':
