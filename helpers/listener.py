@@ -1,3 +1,4 @@
+import socket
 from queue import Queue
 from threading import Thread
 from flask import Flask, request
@@ -6,7 +7,7 @@ from helpers.network import find_free_port
 
 LISTENER_HOST = '0.0.0.0'
 LISTENER_PORT = find_free_port()
-LISTENER_URL = f'http://{LISTENER_HOST}:{LISTENER_PORT}'
+LISTENER_URL = f'http://{socket.gethostbyname(socket.gethostname())}:{LISTENER_PORT}'
 
 
 def run_listener(queue: Queue, daemon=True, port=LISTENER_PORT):
