@@ -3,12 +3,20 @@ import requests
 from random import randint
 
 
-def find_free_port(port=5005):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        if s.connect_ex(('localhost', port)) == 0:
-            return find_free_port(port=port + randint(0, 995))
-        else:
-            return port
+def find_free_port():
+    port = randint(5005, 6000)
+    counter = 0
+
+    while counter <= 10:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+
+            if s.connect_ex(('localhost', port)) == 0:
+                counter += 1
+                continue
+            else:
+                return port
+
+    return 0
 
 
 def get_request(url, headers, params=None):
