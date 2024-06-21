@@ -13,7 +13,13 @@ import messenger_test_data as test_data
 from helpers.data import create_username, create_password, create_phone_number
 
 
+SELF_SIGNED_CERT = os.path.abspath('../../cert/certificate.pem')
+
+
 class TestLoad(HttpUser):
+
+    def on_start(self):
+        self.client.verify = SELF_SIGNED_CERT
 
     @task
     def check_health(self):

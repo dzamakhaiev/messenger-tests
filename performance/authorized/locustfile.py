@@ -21,6 +21,7 @@ from helpers.listener import run_listener
 
 
 total_messages_received = 0
+SELF_SIGNED_CERT = os.path.abspath('../../cert/certificate.pem')
 
 
 class TestLoad(HttpUser):
@@ -51,6 +52,8 @@ class TestLoad(HttpUser):
                 counter += 1
 
     def on_start(self):
+        self.client.verify = SELF_SIGNED_CERT
+
         # Create new user to send messages
         logging.info('Create new user')
         sleep(uniform(0.25, 1.75))
