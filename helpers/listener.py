@@ -19,7 +19,7 @@ def run_listener(queue: Queue, port=None):
             queue.put(request.json)
             return 'Message received.', 200
 
-    task_thread = Thread(target=lambda: app.run(host=LISTENER_HOST, port=port, debug=False))
+    task_thread = Thread(target=lambda: app.run(host=LISTENER_HOST, port=port, debug=False), daemon=True)
     task_thread.start()
     return f'http://{socket.gethostbyname(socket.gethostname())}:{port}'
 

@@ -1,13 +1,17 @@
+import os
 import socket
 import requests
 from random import randint
+
+
+SELF_SIGNED_CERT = os.path.abspath('../cert/certificate.pem')
 
 
 def find_free_port():
     port = randint(5005, 6000)
     counter = 0
 
-    while counter <= 10:
+    while counter <= 100:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
             if s.connect_ex(('localhost', port)) == 0:
@@ -21,7 +25,7 @@ def find_free_port():
 
 def get_request(url, headers, params=None):
     try:
-        response = requests.get(url, params=params, headers=headers)
+        response = requests.get(url, params=params, headers=headers, verify=SELF_SIGNED_CERT)
         return response
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout) as e:
         return e
@@ -29,7 +33,7 @@ def get_request(url, headers, params=None):
 
 def post_request(url, headers, json_dict=None):
     try:
-        response = requests.post(url, json=json_dict, headers=headers)
+        response = requests.post(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
         return response
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout) as e:
         return e
@@ -37,7 +41,7 @@ def post_request(url, headers, json_dict=None):
 
 def put_request(url, headers, json_dict=None):
     try:
-        response = requests.put(url, json=json_dict, headers=headers)
+        response = requests.put(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
         return response
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout) as e:
         return e
@@ -45,7 +49,7 @@ def put_request(url, headers, json_dict=None):
 
 def patch_request(url, headers, json_dict=None):
     try:
-        response = requests.patch(url, json=json_dict, headers=headers)
+        response = requests.patch(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
         return response
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout) as e:
         return e
@@ -53,7 +57,7 @@ def patch_request(url, headers, json_dict=None):
 
 def delete_request(url, headers, json_dict=None):
     try:
-        response = requests.delete(url, json=json_dict, headers=headers)
+        response = requests.delete(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
         return response
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout) as e:
         return e
