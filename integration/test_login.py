@@ -1,5 +1,4 @@
 import unittest
-import messenger_test_data
 from test_framework import TestFramework
 from helpers.data import corrupt_json_field, remove_json_field
 
@@ -7,8 +6,9 @@ from helpers.data import corrupt_json_field, remove_json_field
 class LoginTest(TestFramework):
 
     def setUp(self):
-        self.correct_json = {'username': messenger_test_data.USERNAME,
-                             'password': messenger_test_data.PASSWORD,
+        self.user = self.create_new_user()
+        self.correct_json = {'username': self.user.username,
+                             'password': self.user.password,
                              'user_address': 'some_ip'}
 
     def test_login_positive(self):
@@ -16,7 +16,7 @@ class LoginTest(TestFramework):
         self.assertEqual(response.status_code, 200, response.text)
 
         user_id = response.json().get('user_id')
-        self.assertEqual(messenger_test_data.USER_ID, user_id, f'Incorrect user_id: {user_id}')
+        self.assertEqual(self.user.user_id, user_id, f'Incorrect user_id: {user_id}')
 
         token = response.json().get('token')
         self.assertIsInstance(token, str, f'Unexpected token data type: {token}')

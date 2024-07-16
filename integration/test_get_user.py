@@ -1,5 +1,4 @@
 import unittest
-import messenger_test_data
 from test_framework import TestFramework
 from helpers.data import corrupt_json_field, remove_json_field
 
@@ -7,13 +6,14 @@ from helpers.data import corrupt_json_field, remove_json_field
 class GetUserTest(TestFramework):
 
     def setUp(self):
-        self.correct_json = {'username': messenger_test_data.USERNAME}
+        self.user = self.create_new_user()
+        self.correct_json = {'username': self.user.username}
 
     def test_get_user_id_positive(self):
         response = self.get_user(self.correct_json)
         self.assertEqual(200, response.status_code, msg=response.text)
         user_id = response.json()['user_id']
-        self.assertEqual(messenger_test_data.USER_ID, user_id, f'Incorrect user_id: {user_id}')
+        self.assertEqual(self.user.user_id, user_id, f'Incorrect user_id: {user_id}')
 
     def test_validation_error(self):
         incorrect_json = remove_json_field(self.correct_json, 'username')
