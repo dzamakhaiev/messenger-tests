@@ -32,6 +32,7 @@ class TestFramework(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.login_url = messenger_urls.MESSENGER_URL + messenger_urls.LOGIN
+        cls.logout_url = messenger_urls.MESSENGER_URL + messenger_urls.LOGOUT
         cls.users_url = messenger_urls.MESSENGER_URL + messenger_urls.USERS
         cls.messages_url = messenger_urls.MESSENGER_URL + messenger_urls.MESSAGES
         cls.users = []
@@ -78,6 +79,14 @@ class TestFramework(unittest.TestCase):
 
     def log_in(self, json_dict):
         response = self.request(url=self.login_url, json_dict=json_dict, headers=HEADERS)
+        return response
+
+    def log_out(self, json_dict, token=None):
+        headers = copy(HEADERS)
+        if token:
+            headers['Authorization'] = f'Bearer {token}'
+
+        response = self.request(url=self.logout_url, json_dict=json_dict, headers=headers)
         return response
 
     def log_in_with_listener_url(self, user: User, listener_port):
