@@ -57,8 +57,11 @@ class TestFramework(unittest.TestCase):
         sleep(sleep_time)
         return response
 
-    def get_user(self, json_dict):
-        response = self.request(url=self.users_url, json_dict=json_dict, request_type='get', headers=HEADERS)
+    def get_user(self, json_dict, token=None):
+        headers = copy(HEADERS)
+        if token:
+            headers['Authorization'] = f'Bearer {token}'
+        response = self.request(url=self.users_url, json_dict=json_dict, request_type='get', headers=headers)
         return response
 
     def create_user(self, json_dict):

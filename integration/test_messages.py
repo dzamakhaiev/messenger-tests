@@ -92,7 +92,7 @@ class MessagesTest(TestFramework):
 
             with self.subTest(f'Send message with no "{field}" field.'):
                 incorrect_json = remove_json_field(self.msg_json, field)
-                response = self.send_message(incorrect_json)
+                response = self.send_message(incorrect_json, token=self.user.token)
                 self.assertEqual(400, response.status_code, msg=response.text)
 
     def test_data_error(self):
@@ -103,7 +103,7 @@ class MessagesTest(TestFramework):
 
             with self.subTest(f'Send message with incorrect "{field}" field.'):
                 incorrect_json = corrupt_json_field(self.msg_json, field)
-                response = self.send_message(incorrect_json)
+                response = self.send_message(incorrect_json, token=self.user.token)
                 self.assertEqual(code, response.status_code, msg=response.text)
 
 
