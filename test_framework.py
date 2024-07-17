@@ -25,6 +25,7 @@ class User:
         self.token = None
         self.user_address = None
         self.listener_port = None
+        self.private_key = None
         self.public_key = None
 
 
@@ -97,8 +98,10 @@ class TestFramework(unittest.TestCase):
         local_host_ip = network.get_local_ip()
         user.user_address = f'http://{local_host_ip}:{listener_port}'
         user.listener_port = listener_port
-        login_json = {'username': user.username, 'password': user.password, 'user_address': user.user_address,
-                      'public_key': 'some_key'}
+        user.public_key = user.public_key if user.public_key else 'some_key'
+
+        login_json = {'username': user.username, 'password': user.password,
+                      'user_address': user.user_address, 'public_key': user.public_key}
         response = self.log_in(login_json)
 
         if response.status_code == 200:
