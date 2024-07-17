@@ -1,6 +1,9 @@
 import copy
 import string
 from random import randint
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+
 
 
 def create_username():
@@ -60,3 +63,45 @@ def remove_json_field(json_dict: dict, remove_field: str):
             incorrect_dict.pop(field)
 
     return incorrect_dict
+
+
+def generate_pem_keys():
+    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    public_key = private_key.public_key()
+    return private_key, public_key
+
+
+def serialize_keys(private_key, public_key):
+    private_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption())
+
+    public_pem = public_key.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo)
+
+    return private_pem.decode('utf-8'), public_pem.decode('utf-8')
+
+
+def deserialize_keys(private_pem: str = None, public_pem: str = None):
+    if private_pem:
+        private_key = serialization.load_pem_private_key(private_pem.encode('utf-8'), password=None)
+        return private_key
+
+    if public_pem:
+        public_key = serialization.load_pem_public_key(public_pem.encode('utf-8'))
+        return public_key
+
+
+def encrypt_message(public_key, message: bytes):
+    encrypted_message = public_key.encrypt(
+        message, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+    return encrypted_message.hex()
+
+
+def decrypt_message(private_key, encrypted_message):
+    decrypted_message = private_key.decrypt(
+        encrypted_message,
+        padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+    return decrypted_message.decode('utf-8')
