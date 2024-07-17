@@ -2,13 +2,12 @@ import unittest
 from test_framework import TestFramework
 
 
-class LoginTest(TestFramework):
+class LogoutTest(TestFramework):
 
     def setUp(self):
         self.user = self.create_new_user()
-        self.correct_json = {'username': self.user.username,
-                             'password': self.user.password,
-                             'user_address': 'some_ip'}
+        self.correct_json = {'username': self.user.username, 'password': self.user.password,
+                             'user_address': 'some_ip', 'public_key': 'some_key'}
 
     def test_logout_positive(self):
         response = self.log_in(self.correct_json)

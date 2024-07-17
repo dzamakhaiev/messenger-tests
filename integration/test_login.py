@@ -7,9 +7,8 @@ class LoginTest(TestFramework):
 
     def setUp(self):
         self.user = self.create_new_user()
-        self.correct_json = {'username': self.user.username,
-                             'password': self.user.password,
-                             'user_address': 'some_ip'}
+        self.correct_json = {'username': self.user.username, 'password': self.user.password,
+                             'user_address': 'some_ip', 'public_key': 'some_key'}
 
     def test_login_positive(self):
         response = self.log_in(self.correct_json)
@@ -31,7 +30,7 @@ class LoginTest(TestFramework):
                 self.assertEqual('Incorrect username or password.', response.text)
 
     def test_validation_error(self):
-        for field in ('username', 'password', 'user_address', 'username and password and user_address'):
+        for field in ('username', 'password', 'user_address', 'public_key'):
 
             with self.subTest(f'Login with no "{field}" field.'):
                 incorrect_json = remove_json_field(self.correct_json, field)
