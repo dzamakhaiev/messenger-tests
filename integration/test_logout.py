@@ -32,16 +32,18 @@ class LoginTest(TestFramework):
     def test_incorrect_logout(self):
         response = self.log_in(self.correct_json)
         self.assertEqual(response.status_code, 200, response.text)
+        token = response.json().get('token')
 
-        response = self.log_out(json_dict={})
+        response = self.log_out(json_dict={}, token=token)
         self.assertEqual(400, response.status_code, msg=response.text)
         self.assertEqual('Validation error.', response.text)
 
     def test_validation_error(self):
         response = self.log_in(self.correct_json)
         self.assertEqual(response.status_code, 200, response.text)
+        token = response.json().get('token')
 
-        response = self.log_out(json_dict={'username': 'some user'})
+        response = self.log_out(json_dict={'username': 'some user'}, token=token)
         self.assertEqual(400, response.status_code, msg=response.text)
         self.assertEqual('Validation error.', response.text)
 
