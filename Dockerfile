@@ -1,31 +1,10 @@
-FROM ubuntu:22.04
-ENV RUNNER_ALLOW_RUNASROOT=1
-
-RUN apt-get update -y
-RUN apt-get upgrade -y
-RUN apt-get install git -y
-RUN apt-get install curl -y
-RUN apt-get install apt-transport-https ca-certificates software-properties-common -y
-
-RUN mkdir docker
-WORKDIR /docker
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN apt-get update -y
-RUN apt-get install docker-ce -y
-COPY docker-config/docker /etc/init.d/docker
-RUN service docker restart
-RUN apt-get install docker-compose-plugin
-
-WORKDIR /
-RUN mkdir actions-runner
-WORKDIR /actions-runner
-
-RUN curl -o actions-runner-linux-x64-2.317.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.317.0/actions-runner-linux-x64-2.317.0.tar.gz
-RUN echo "9e883d210df8c6028aff475475a457d380353f9d01877d51cc01a17b2a91161d actions-runner-linux-x64-2.317.0.tar.gz" | sha256sum -c -
-RUN tar xzf actions-runner-linux-x64-2.317.0.tar.gz
-RUN rm actions-runner-linux-x64-2.317.0.tar.gz
-
-RUN ./bin/installdependencies.sh
-RUN ./config.sh --url https://github.com/dzamakhaiev/messenger --token ABQ7XMGMROCMFVV7Y37SR2TGTVBEC
-CMD ./run.sh
+FROM python:3-alpine
+ENV RUN_INSIDE_DOCKER 1
+RUN apk update
+RUN apk upgrade
+RUN apk add git
+RUN git clone --depth 1 https://github.com/dzamakhaiev/messenger-tests.git
+WORKDIR /messenger-tests
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt --break-system-packages
+#CMD python3 -m unittest discover integration > test_results.txt
