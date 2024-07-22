@@ -5,7 +5,6 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 
 
-
 def create_username():
     return 'user_{}'.format(randint(1, 9999999))
 
