@@ -4,7 +4,9 @@ import requests
 from random import randint
 
 
-SELF_SIGNED_CERT = os.path.abspath('../cert/certificate.pem')
+current_dir = os.path.dirname(__file__)
+repo_dir = os.path.abspath(os.path.join(current_dir, '..'))
+SELF_SIGNED_CERT = os.path.join(repo_dir, 'cert', 'certificate.pem')
 
 
 def find_free_port():
