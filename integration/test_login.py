@@ -38,9 +38,6 @@ class LoginTest(TestFramework):
                 self.assertEqual(400, response.status_code, msg=response.text)
                 self.assertEqual('Validation error.', response.text)
 
-    def test_fail(self):
-        self.assertTrue(False)
-
 
 if __name__ == '__main__':
     unittest.main()
