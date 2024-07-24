@@ -4,9 +4,11 @@ import requests
 from random import randint
 
 
+CI_RUN = int(os.environ.get('CI_RUN', 0))
 current_dir = os.path.dirname(__file__)
 repo_dir = os.path.abspath(os.path.join(current_dir, '..'))
-SELF_SIGNED_CERT = os.path.join(repo_dir, 'cert', 'certificate.pem')
+cert_dir = 'cert-ci' if CI_RUN else 'cert'
+SELF_SIGNED_CERT = os.path.join(repo_dir, cert_dir, 'certificate.pem')
 
 
 def find_free_port():
