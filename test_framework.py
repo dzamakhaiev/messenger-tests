@@ -7,17 +7,21 @@ from datetime import datetime
 
 from helpers.data import create_username, create_phone_number, create_password
 from helpers.listener import run_listener
+from logger.logger import Logger
 from helpers import network
 import messenger_test_data
 import messenger_urls
 
 
 HEADERS = {'Content-type': 'application/json', 'Authorization': None}
+framework_logger = Logger('framework_logger')
 
 
 class User:
 
     def __init__(self, user_id, username, phone_number, password=messenger_test_data.PASSWORD):
+        framework_logger.debug(f'Create user instance with attributes: '
+                               f'{user_id, username, phone_number, password}')
         self.user_id = user_id
         self.username = username
         self.password = password
@@ -33,6 +37,7 @@ class TestFramework(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        framework_logger.debug('Set up messenger URLs for TestFramework class. ')
         cls.login_url = messenger_urls.MESSENGER_URL + messenger_urls.LOGIN
         cls.logout_url = messenger_urls.MESSENGER_URL + messenger_urls.LOGOUT
         cls.users_url = messenger_urls.MESSENGER_URL + messenger_urls.USERS
@@ -41,6 +46,10 @@ class TestFramework(unittest.TestCase):
         cls.msg_json = {}
 
     def request(self, url, json_dict, headers, sleep_time=0.1, request_type='post'):
+        framework_logger.info(f'{request_type} request to URL: {url}\n'
+                              f'json: {json_dict}\n'
+                              f'headers: {headers}')
+
         if request_type == 'get':
             response = network.get_request(url, headers, json_dict)
         elif request_type == 'post':
