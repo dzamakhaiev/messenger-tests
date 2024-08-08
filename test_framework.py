@@ -12,7 +12,7 @@ from helpers import network
 import messenger_test_data
 import messenger_urls
 
-MESSENGER_URL = messenger_urls.MESSENGER_URL_CI
+MESSENGER_URL = messenger_urls.MESSENGER_URL_SSL_CI
 HEADERS = {'Content-type': 'application/json', 'Authorization': None}
 framework_logger = Logger('framework_logger')
 
