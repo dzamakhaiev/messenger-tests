@@ -6,6 +6,7 @@ from logger.logger import Logger
 
 
 CI_RUN = int(os.environ.get('CI_RUN', 0))
+TIMEOUT = 10
 current_dir = os.path.dirname(__file__)
 repo_dir = os.path.abspath(os.path.join(current_dir, '..'))
 cert_dir = 'cert-ci' if CI_RUN else 'cert'
@@ -31,7 +32,7 @@ def find_free_port():
 
 def get_request(url, headers, params=None):
     try:
-        response = requests.get(url, params=params, headers=headers, verify=SELF_SIGNED_CERT)
+        response = requests.get(url, params=params, headers=headers, verify=SELF_SIGNED_CERT, timeout=TIMEOUT)
         network_logger.debug(f'Get response with:\n'
                              f'status code: {response.status_code}\n'
                              f'content: {response.content.decode()}')
@@ -44,7 +45,7 @@ def get_request(url, headers, params=None):
 
 def post_request(url, headers, json_dict=None):
     try:
-        response = requests.post(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
+        response = requests.post(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT, timeout=TIMEOUT)
         network_logger.debug(f'Post response with:\n'
                              f'status code: {response.status_code}\n'
                              f'content: {response.content.decode()}')
@@ -56,7 +57,7 @@ def post_request(url, headers, json_dict=None):
 
 def put_request(url, headers, json_dict=None):
     try:
-        response = requests.put(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
+        response = requests.put(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT, timeout=TIMEOUT)
         network_logger.debug(f'Put response with:\n'
                              f'status code: {response.status_code}\n'
                              f'content: {response.content.decode()}')
@@ -68,7 +69,7 @@ def put_request(url, headers, json_dict=None):
 
 def patch_request(url, headers, json_dict=None):
     try:
-        response = requests.patch(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
+        response = requests.patch(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT, timeout=TIMEOUT)
         network_logger.debug(f'Patch response with:\n'
                              f'status code: {response.status_code}\n'
                              f'content: {response.content.decode()}')
@@ -80,7 +81,7 @@ def patch_request(url, headers, json_dict=None):
 
 def delete_request(url, headers, json_dict=None):
     try:
-        response = requests.delete(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT)
+        response = requests.delete(url, json=json_dict, headers=headers, verify=SELF_SIGNED_CERT, timeout=TIMEOUT)
         network_logger.debug(f'Delete response with:\n'
                              f'status code: {response.status_code}\n'
                              f'content: {response.content.decode()}')
