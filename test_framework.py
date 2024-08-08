@@ -12,7 +12,7 @@ from helpers import network
 import messenger_test_data
 import messenger_urls
 
-
+MESSENGER_URL = messenger_urls.MESSENGER_URL_CI
 HEADERS = {'Content-type': 'application/json', 'Authorization': None}
 framework_logger = Logger('framework_logger')
 
@@ -38,10 +38,10 @@ class TestFramework(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         framework_logger.debug('Set up messenger URLs for TestFramework class. ')
-        cls.login_url = messenger_urls.MESSENGER_URL + messenger_urls.LOGIN
-        cls.logout_url = messenger_urls.MESSENGER_URL + messenger_urls.LOGOUT
-        cls.users_url = messenger_urls.MESSENGER_URL + messenger_urls.USERS
-        cls.messages_url = messenger_urls.MESSENGER_URL + messenger_urls.MESSAGES
+        cls.login_url = MESSENGER_URL + messenger_urls.LOGIN
+        cls.logout_url = MESSENGER_URL + messenger_urls.LOGOUT
+        cls.users_url = MESSENGER_URL + messenger_urls.USERS
+        cls.messages_url = MESSENGER_URL + messenger_urls.MESSAGES
         cls.users = []
         cls.msg_json = {}
 
