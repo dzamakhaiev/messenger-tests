@@ -1,3 +1,4 @@
+import os
 import unittest
 import requests
 from copy import copy
@@ -12,7 +13,8 @@ from helpers import network
 import messenger_test_data
 import messenger_urls
 
-MESSENGER_URL = messenger_urls.MESSENGER_URL_CI_SSL
+CI_RUN = int(os.environ.get('CI_RUN', 0))
+MESSENGER_URL = messenger_urls.MESSENGER_URL_CI_SSL if CI_RUN else messenger_urls.MESSENGER_URL_PROD
 HEADERS = {'Content-type': 'application/json', 'Authorization': None}
 framework_logger = Logger('framework_logger')
 
