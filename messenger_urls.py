@@ -1,6 +1,3 @@
-import os
-CI_RUN = int(os.environ.get('CI_RUN', 0))
-
 # PROD SSL URL
 MESSENGER_HOST = '192.168.50.100'
 MESSENGER_PORT = 5000
