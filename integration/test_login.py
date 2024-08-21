@@ -13,11 +13,14 @@ class LoginTest(TestFramework):
     def test_login_positive(self):
         response = self.log_in(self.correct_json)
         self.assertEqual(response.status_code, 200, response.text)
+        self.assertTrue(response.json())
 
         user_id = response.json().get('user_id')
+        self.assertTrue(user_id)
         self.assertEqual(self.user.user_id, user_id, f'Incorrect user_id: {user_id}')
 
         token = response.json().get('token')
+        self.assertTrue(token)
         self.assertIsInstance(token, str, f'Unexpected token data type: {token}')
 
     def test_incorrect_login(self):
@@ -30,7 +33,7 @@ class LoginTest(TestFramework):
                 self.assertEqual('Incorrect username or password.', response.text)
 
     def test_validation_error(self):
-        for field in ('username', 'password', 'user_address', 'public_key'):
+        for field in self.correct_json.keys():
 
             with self.subTest(f'Login with no "{field}" field.'):
                 incorrect_json = remove_json_field(self.correct_json, field)
