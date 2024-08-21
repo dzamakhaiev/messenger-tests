@@ -14,7 +14,7 @@ class CreateUserTest(TestFramework):
         response = self.create_user(self.correct_json)
         self.assertEqual(201, response.status_code, msg=response.text)
         user_id = response.json()['user_id']
-        self.assertTrue(user_id, f'Incorrect user_id: {user_id}')
+        self.assertTrue(isinstance(user_id, int) and user_id > 0, f'Incorrect user_id: {user_id}')
 
     def test_validation_error(self):
         incorrect_json = remove_json_field(self.correct_json, 'username')
