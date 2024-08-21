@@ -13,8 +13,9 @@ MESSENGER_HOST_CI = '172.29.152.100'
 MESSENGER_PORT_CI = 5002
 MESSENGER_URL_CI = f'http://{MESSENGER_HOST_CI}:{MESSENGER_PORT_CI}'
 
-HEALTH = '/health'
 API = '/api'
+AUTH = '/auth'
+HEALTH = '/health'
 LOGIN = API + '/login/'
 LOGOUT = API + '/logout/'
 USERS = API + '/users/'
