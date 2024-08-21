@@ -17,14 +17,18 @@ class CreateUserTest(TestFramework):
         self.assertTrue(isinstance(user_id, int) and user_id > 0, f'Incorrect user_id: {user_id}')
 
     def test_validation_error(self):
-        incorrect_json = remove_json_field(self.correct_json, 'username')
-        response = self.create_user(incorrect_json)
-        self.assertEqual(400, response.status_code, msg=response.text)
+        for key in self.correct_json.keys():
+            with self.subTest(msg=f'Check missing field error: {key}'):
+                incorrect_json = remove_json_field(self.correct_json, key)
+                response = self.create_user(incorrect_json)
+                self.assertEqual(400, response.status_code, msg=response.text)
 
     def test_incorrect_data(self):
-        incorrect_json = corrupt_json_field(self.correct_json, 'username', None)
-        response = self.create_user(incorrect_json)
-        self.assertEqual(400, response.status_code, msg=response.text)
+        for key in self.correct_json.keys():
+            with self.subTest(msg=f'Check incorrect field error: {key}'):
+                incorrect_json = corrupt_json_field(self.correct_json, key, None)
+                response = self.create_user(incorrect_json)
+                self.assertEqual(400, response.status_code, msg=response.text)
 
 
 if __name__ == '__main__':
