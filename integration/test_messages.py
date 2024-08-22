@@ -88,7 +88,7 @@ class MessagesTest(TestFramework):
         new_user = self.create_new_user()
         self.msg_json['receiver_id'] = new_user.user_id
 
-        for field in ['message', 'sender_id', 'sender_username', 'receiver_id', 'send_date']:
+        for field in self.msg_json.keys():
 
             with self.subTest(f'Send message with no "{field}" field.'):
                 incorrect_json = remove_json_field(self.msg_json, field)
