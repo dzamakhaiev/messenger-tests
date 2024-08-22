@@ -16,6 +16,7 @@ class GetUserTest(TestFramework):
     def test_get_user_id_positive(self):
         response = self.get_user(self.correct_json, token=self.user.token)
         self.assertEqual(200, response.status_code, msg=response.text)
+        self.assertTrue(response.json())
 
         user_id = response.json()['user_id']
         self.assertEqual(self.user.user_id, user_id, f'Incorrect user_id: {user_id}')
