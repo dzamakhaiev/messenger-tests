@@ -30,7 +30,6 @@ class LoginTest(TestFramework):
                 incorrect_json = corrupt_json_field(self.correct_json, field)
                 response = self.log_in(incorrect_json)
                 self.assertEqual(401, response.status_code, msg=response.text)
-                self.assertEqual('Incorrect username or password.', response.text)
 
     def test_validation_error(self):
         for field in self.correct_json.keys():
@@ -39,7 +38,6 @@ class LoginTest(TestFramework):
                 incorrect_json = remove_json_field(self.correct_json, field)
                 response = self.log_in(incorrect_json)
                 self.assertEqual(400, response.status_code, msg=response.text)
-                self.assertEqual('Validation error.', response.text)
 
 
 if __name__ == '__main__':

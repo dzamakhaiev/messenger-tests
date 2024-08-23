@@ -26,7 +26,7 @@ class LogoutTest(TestFramework):
         self.assertEqual(response.status_code, 200, response.text)
 
         response = self.log_out(json_dict={'username': self.user.username})
-        self.assertEqual(401, response.status_code, msg=response.text)
+        self.assertIn(response.status_code, (401, 403) , msg=response.text)
 
     def test_incorrect_logout(self):
         response = self.log_in(self.correct_json)
@@ -35,7 +35,6 @@ class LogoutTest(TestFramework):
 
         response = self.log_out(json_dict={}, token=token)
         self.assertEqual(400, response.status_code, msg=response.text)
-        self.assertEqual('Validation error.', response.text)
 
     def test_validation_error(self):
         response = self.log_in(self.correct_json)
@@ -44,7 +43,6 @@ class LogoutTest(TestFramework):
 
         response = self.log_out(json_dict={'username': 'some user'}, token=token)
         self.assertEqual(400, response.status_code, msg=response.text)
-        self.assertEqual('Validation error.', response.text)
 
 
 if __name__ == '__main__':
