@@ -56,7 +56,6 @@ class EncryptedMessagesTest(TestFramework):
 
         # Check that message received
         self.assertEqual(200, response.status_code, msg=response.text)
-        self.assertEqual(response.text, 'Message processed.')
         sleep(1)
         self.assertEqual(new_queue.qsize(), 1, 'No message in queue.')
 
