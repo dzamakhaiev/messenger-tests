@@ -1,6 +1,6 @@
 import copy
 import string
-from random import randint
+from random import randint, choice
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 
@@ -19,7 +19,7 @@ def create_password(length=10, default=False):
 
     password = ''
     for _ in range(length//2):
-        password += string.ascii_letters
+        password += choice(string.ascii_letters)
         password += str(randint(0, 9))
 
     return password

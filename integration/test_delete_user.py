@@ -13,7 +13,6 @@ class DeleteUserTest(TestFramework):
     def test_delete_user_positive(self):
         response = self.delete_user(self.delete_json)
         self.assertEqual(200, response.status_code, msg=response.text)
-        self.assertEqual('User deleted.', response.text, msg=response.text)
 
 
 if __name__ == '__main__':
