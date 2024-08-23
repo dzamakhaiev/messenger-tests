@@ -97,9 +97,16 @@ class EncryptedMessagesTest(TestFramework):
             default_user_public_key, message_to_default_user.encode('utf-8'))
 
         # Send encrypted message to both users
-        msg_json = self.create_new_msg_json(receiver_id=new_user.user_id, message=encrypted_message_to_new_user)
+        msg_json = self.create_new_msg_json(sender_id=self.user.user_id,
+                                            sender_username=self.user.username,
+                                            receiver_id=new_user.user_id,
+                                            message=encrypted_message_to_new_user)
         response_from_new_user = self.send_message(msg_json, token=self.user.token)
-        msg_json = self.create_new_msg_json(receiver_id=self.user.user_id, message=encrypted_message_to_default_user)
+
+        msg_json = self.create_new_msg_json(sender_id=new_user.user_id,
+                                            sender_username=new_user.username,
+                                            receiver_id=self.user.user_id,
+                                            message=encrypted_message_to_default_user)
         response_from_default_user = self.send_message(msg_json, token=new_user.token)
 
         # Check that messages processed on server side and sent to receivers
